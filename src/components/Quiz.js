@@ -1,36 +1,56 @@
+import {useContext, useEffect} from "react";
 import Question from "./Question";
-import {useReducer} from "react";
+import { QuizContext } from "../contexts/quiz";
 
-const initialState = {
-    questions: [],
-    currentQuestionIndex: 1,
-}
+const Quiz = () => {
+    const [quizState, dispatch] = useContext(QuizContext);
+    const apiUrl = "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986";
 
-const reducer = (state, action) => {
-    console.log("reducer", state, action);
-    if (action.type === "NEXT_QUESTION"){
-        return {
-            state,
-            currentQuestionIndex: state.currentQuestionIndex + 1,
-
+    useEffect(() => {
+        if (quizState.questions.length>0){
+            return;
         }
-    }
-    return state;
-}
+        console.log("useEffect");
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then((data)=>{
+                console.log("data", data);
+                dispatch({type: 'LOADED_QUESTIONS', payload: data.results})
+        });
+    })
 
-const  Quiz = () => {
-    const [state, dispatch] = useReducer(reducer, initialState)
-    console.log('state', state)
+    console.log("quizState", quizState);
     return (
         <div className="quiz">
-            <div>
-                <div className="score">Question {state.currentQuestionIndex}/8</div>
-                <Question questions={state.questions}/>
-                <div className="next-button" onClick={()=>dispatch({type: 'NEXT_QUESTION'})}>Next question</div>
-            </div>
+            {quizState.showResults === true && (
+                <div className="results">
+                    <div className="congratulations">Congratulations</div>
+                    <div className="results-info">
+                        <div> ты закончил ура!</div>
+                        <div> твой счет: {quizState.correctAnswersCount} из {quizState.questions.length}!</div>
+                        <div className="next-button"
+                             onClick={()=> dispatch({type: "RESTART"})}>Restart</div>
+                    </div>
+                </div>
+
+            )}
+            {!quizState.showResults && quizState.questions.length > 0 && (
+                <div>
+                <div className="score">
+                    Question {quizState.currentQuestionIndex + 1}/
+                    {quizState.questions.length}
+                </div>
+                <Question />
+                <div
+                    className="next-button"
+                    onClick={() => dispatch({ type: "NEXT_QUESTION" })}
+                >
+                    Next question
+                </div>
+            </div>)}
 
         </div>
-    )
-}
+    );
+};
 
-export default Quiz
+export default Quiz;
