@@ -29,7 +29,7 @@ It's mandatory to install [NodeJS](https://nodejs.org/en/download/). After open 
 ```
  cd react-simple-quiz
 ```
-- Install depencies
+- Install dependencies
 ```
  npm install
 ```
