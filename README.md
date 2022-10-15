@@ -1,3 +1,3 @@
 ### Good React Quiz
 
-[attaching a link](www.google.com)
+[attaching a link](https://www.google.com)
