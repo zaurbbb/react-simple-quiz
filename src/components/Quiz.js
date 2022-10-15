@@ -26,8 +26,8 @@ const Quiz = () => {
                 <div className="results">
                     <div className="congratulations">Congratulations</div>
                     <div className="results-info">
-                        <div> ты закончил ура!</div>
-                        <div> твой счет: {quizState.correctAnswersCount} из {quizState.questions.length}!</div>
+                        <div> You've finished quiz! </div>
+                        <div> Your score is {quizState.correctAnswersCount} of {quizState.questions.length}!</div>
                         <div className="next-button"
                              onClick={()=> dispatch({type: "RESTART"})}>Restart</div>
                     </div>
